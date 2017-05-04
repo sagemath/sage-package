@@ -7,8 +7,12 @@ This extension sets up:
 - extlinks: short hand roles for wikipedia, trac, arxiv, ...
 """
 
-sage_doc = "http://doc.sagemath.org/html/en/"
-
+sage_doc_url = "http://doc.sagemath.org/html/en/"
+sage_documents = [
+    "a_tour_of_sage", "constructions", "developer", "faq",
+    "installation", "prep", "reference", "thematic_tutorials",
+    "tutorial"
+]
 sage_modules = [
     "algebras", "databases", "game_theory", "logic", "monoids", "quadratic_forms",
     "semirings", "arithgroup", "data_structures", "graphs", "manifolds",
@@ -42,11 +46,11 @@ def setup(app):
         'https://docs.python.org/': None
         })
     app.config.intersphinx_mapping.update({
-        sage_doc + doc + "/": None
-        for doc in ["prep", "reference", "thematic_tutorials", "tutorial"]
+        sage_doc_url + doc + "/": None
+        for doc in sage_documents
         })
     app.config.intersphinx_mapping.update({
-        sage_doc + "reference/" + module: None
+        sage_doc_url + "reference/" + module: None
         for module in sage_modules
         })
 
