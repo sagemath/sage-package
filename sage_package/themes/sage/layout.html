@@ -1,7 +1,9 @@
 {% extends "basic/layout.html" %}
 
 {% block rootrellink %}
-  {% if docstitle.startswith('Sage Documentation') %}
+  {# This chunk fails on ReadTheDocs and is not relevant outside of Sage's documentation.
+     Replacing this chunk with a simplified version
+  {% if docstit.startswith('Sage Documentation') %}
     <a href="http://www.sagemath.org"><img src="{{ pathto('_static/sagelogo.png', 1) }}" style="vertical-align: middle" title="Sage Logo"></a>
   {% else %}
     {% if pathto(master_doc).endswith('.html') %}
@@ -10,6 +12,8 @@
       <a href="{{ '../' + pathto(master_doc, 1) + '.html' }}"><img src="{{ pathto('_static/sagelogo.png', 1) }}" style="vertical-align: middle" title="Sage Logo"></a>
     {% endif %}
   {% endif %}
+  #}
+  <a href="http://www.sagemath.org"><img src="{{ pathto('_static/sagelogo.png', 1) }}" style="vertical-align: middle" title="Sage Logo"></a>
   {{ super() }}
 {% endblock %}
 
