@@ -12,7 +12,7 @@ def package_files(directory):
 
 setup(
     name = "sage-package",
-    version = "0.0.1",
+    version = "0.0.2",
     description = 'Utilities for authoring SageMath packages',
     # get the long description from the README
     long_description = open("README.rst", encoding='utf-8').read(),
