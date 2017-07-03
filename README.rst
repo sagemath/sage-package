@@ -10,4 +10,4 @@ packages:
 - sage_package.sphinx: Sphinx theme and configuration to write and
   render documentation as in Sage.
 
-For an example of use, see http://github.com/sagemath/sage-sample .
+For an example of use, see http://github.com/sagemath/sage_sample .
