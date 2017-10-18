@@ -12,8 +12,37 @@
 $(function() {
 
     /**
+     * Request a Jupyter kernel for running code with thebe.
+     *
+     * @param {Object} thebeOptions - options for configuring Thebe
+     */
+    function requestKernel(options) {
+        // configure default options:
+        // kernelOptions.name = sagemath
+        // binderOptions.repo =
+        var options = options || {};
+        let kernelOptions = options.kernelOptions || {};
+        if (!kernelOptions.name) {
+            kernelOptions.name = "sagemath";
+        }
+        let binderOptions = options.binderOptions || {};
+        if (!binderOptions.repo) {
+            binderOptions.repo = "nthiery/test-binder-sage";
+        }
+        if (false) {
+            // FIXME: try to detect if we are served locally by jupyter
+            return thebelab.requestKernel(kernelOptions);
+        } else {
+            return thebelab.requestBinderKernel({
+                binderOptions: binderOptions,
+                kernelOptions: kernelOptions,
+            });
+        }
+    }
+
+    /**
      * Build and return the Thebe instance that will communicate with the
-     * Jupyter notebook (or tmpnb server).
+     * Jupyter notebook (or Binder server).
      *
      * This function categorizes the cells lines into "code" and "result"
      * categories to refine the given cell selector and pass only the code
@@ -36,8 +65,13 @@ $(function() {
             $('.' + resultBlockClass, this).hide();
             sanitizeCode(this, codeClass);
         });
-        thebeOptions.selector = '.' + codeBlockClass;
-        return new Thebe(thebeOptions);
+        let cells = thebelab.renderAllCells({
+            selector: '.' + codeBlockClass
+        });
+        requestKernel().then(kernel => {
+            console.log('hooking up kernel to %i cells.', cells.length);
+            thebelab.hookupKernel(kernel, cells);
+        });
     }
 
     /**
