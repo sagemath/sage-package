@@ -11,68 +11,60 @@
 
 $(function() {
 
-    /**
-     * Request a Jupyter kernel for running code with thebe.
-     *
-     * @param {Object} thebeOptions - options for configuring Thebe
-     */
-    function requestKernel(options) {
-        // configure default options:
-        // kernelOptions.name = sagemath
-        // binderOptions.repo =
-        var options = options || {};
-        let kernelOptions = options.kernelOptions || {};
-        if (!kernelOptions.name) {
-            kernelOptions.name = "sagemath";
-        }
-        let binderOptions = options.binderOptions || {};
-        if (!binderOptions.repo) {
-            binderOptions.repo = "nthiery/test-binder-sage";
-        }
-        if (false) {
-            // FIXME: try to detect if we are served locally by jupyter
-            return thebelab.requestKernel(kernelOptions);
-        } else {
-            return thebelab.requestBinderKernel({
-                binderOptions: binderOptions,
-                kernelOptions: kernelOptions,
-            });
-        }
+// TODO: remove
+let _pageConfigData = undefined;
+function getPageConfig(key) {
+  // from jupyterlab coreutils.PageConfig
+  if (!_pageConfigData) {
+    let el = document.getElementById("thebe-config-data");
+    if (el) {
+      _pageConfigData = JSON.parse(el.textContent || "{}");
     }
+  }
+  return (_pageConfigData || {})[key];
+}
 
-    /**
-     * Build and return the Thebe instance that will communicate with the
-     * Jupyter notebook (or Binder server).
-     *
-     * This function categorizes the cells lines into "code" and "result"
-     * categories to refine the given cell selector and pass only the code
-     * lines to Thebe.
-     *
-     * @param {String} cellSelector - A jQuery selector that matches the cells
-     * @param {Object} thebeOptions - Thebe options, must not contain "selector"
-     */
-    function setupThebeSage(cellSelector, thebeOptions) {
-        var lineClass = 'sage-cell-line',
-            codeClass = 'sage-code',
-            codeBlockClass = 'sage-code-block',
-            resultClass = 'sage-expected-result',
-            resultBlockClass = 'sage-expect-result-block';
-        $(cellSelector).each(function() {
-            wrapEachCellLine(this, lineClass);
-            categorizeCellLines(this, lineClass, codeClass, resultClass);
-            wrapLineBlocks(this, lineClass, codeClass, codeBlockClass);
-            wrapLineBlocks(this, lineClass, resultClass, resultBlockClass);
-            $('.' + resultBlockClass, this).hide();
-            sanitizeCode(this, codeClass);
+function getBinderOptions(options) {
+  let binderOptions = {
+    ref: "master",
+    binderUrl: "https://beta.mybinder.org",
+  };
+  Object.assign(binderOptions, getPageConfig("binderOptions"));
+  Object.assign(binderOptions, (options || {}).binderOptions);
+  return binderOptions;
+}
+
+function getKernelOptions(options) {
+  let kernelOptions = {};
+  Object.assign(kernelOptions, getPageConfig("kernelOptions"));
+  Object.assign(kernelOptions, (options || {}).kernelOptions);
+  return kernelOptions;
+}
+
+function bootstrap(options) {
+    // bootstrap thebe on the page
+
+    options = options || {};
+    // bootstrap thebelab on the page
+    let cells = renderAllCells(thebelab.getOption("thebeCellSelector", options));
+    let kernelPromise;
+
+    let binderOptions = getBinderOptions(options);
+    console.log('binderOptions', binderOptions);
+    if (binderOptions.repo) {
+        kernelPromise = thebelab.requestBinderKernel({
+            binderOptions: binderOptions,
+            kernelOptions: getKernelOptions(options),
         });
-        let cells = thebelab.renderAllCells({
-            selector: '.' + codeBlockClass
-        });
-        requestKernel().then(kernel => {
-            console.log('hooking up kernel to %i cells.', cells.length);
-            thebelab.hookupKernel(kernel, cells);
-        });
+    } else {
+        kernelPromise = thebelab.requestKernel(thebelab.getKernelOptions(options));
     }
+    kernelPromise.then(kernel => {
+        // debug
+        window.thebeKernel = kernel;
+        thebelab.hookupKernel(kernel, cells);
+    });
+}
 
     /**
      * Sanitize the code before executing. For now, transforms the code line
@@ -161,21 +153,48 @@ $(function() {
         cellNode.innerHTML = html;
     }
 
-    if (window.location.protocol.startsWith('http')) {
-        var cellSelector = "pre:contains('sage: ')";
-        if ($(cellSelector).length > 0) {
-            $('<button id="thebe-activate">Activate</button>')
-                .css({position: 'absolute', right: 0})
-                .click(function() {
-                    setupThebeSage(cellSelector, {
-                        tmpnb_mode: false,
-                        load_css: false,
-                        url: window.location.origin,
-                        kernel_name: "sagemath"
-                    });
-                    $(this).attr('disabled', 'disabled');
-                })
-                .prependTo('div.body');
-        }
+
+    /**
+     * Preprocess the code cells, sanitizing out HTML tags (e.g. syntax highlighting),
+     * and each cell into a sequence of code and results cells
+     *
+     */
+    function renderAllCells(selector) {
+        var lineClass = 'sage-cell-line',
+            codeClass = 'sage-code',
+            codeBlockClass = 'sage-code-block',
+            resultClass = 'sage-expected-result',
+            resultBlockClass = 'sage-expected-result-block';
+        $(cellSelector).each(function() {
+            wrapEachCellLine(this, lineClass);
+            categorizeCellLines(this, lineClass, codeClass, resultClass);
+            wrapLineBlocks(this, lineClass, codeClass, codeBlockClass);
+            wrapLineBlocks(this, lineClass, resultClass, resultBlockClass);
+            $('.' + resultBlockClass, this).hide();
+            sanitizeCode(this, codeClass);
+        });
+
+        return thebelab.renderAllCells({selector:'.' + codeBlockClass})
+    }
+
+
+    var cellSelector = "pre:contains('sage: ')";
+
+    if ($(cellSelector).length > 0) {
+        $('<button id="thebe-activate">Activate</button>')
+            .css({position: 'absolute', right: 0})
+            .click(function() {
+                bootstrap({
+                    binderOptions: {
+                        repo: "nthiery/test-binder-sage",
+                    },
+                    kernelOptions: {
+                        name: "sagemath",
+                    },
+                    thebeCellSelector: cellSelector
+                });
+                $(this).attr('disabled', 'disabled');
+            })
+            .prependTo('div.body');
     }
 });
