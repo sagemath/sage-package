@@ -1,6 +1,10 @@
 sage-package: Utilities for authoring packages for SageMath
 ===========================================================
 
+.. image:: https://readthedocs.org/projects/sage-package/badge/?version=latest
+    :target: http://sage-package.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 This experimental package provides utilities for authoring SageMath
 packages:
 
