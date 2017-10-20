@@ -19,8 +19,43 @@
 
 {% block extrahead %}
     <link rel="icon" href="{{ pathto('_static/sageicon.png', 1) }}" type="image/x-icon" />
-    <script src="https://unpkg.com/thebelab@0.0.5" type="text/javascript"></script>
-    <script src="{{ pathto('_static/thebe-sage.js', 1) }}" type="text/javascript"></script>
+    <!-- Thebe configuration for live code cells (https://github.com/minrk/thebelab)
+
+      This sets up a dedicated button in the top right corner. When
+      clicked, each code block containing a sage: prompt is appended a
+      "Run" button to execute the code on a Sage Jupyter kernel
+      provided by mybinder (https://mybinder.org).
+      !-->
+    <script type="text/x-thebe-config">
+      thebeConfig = {
+        binderOptions: {
+          repo: "nthiery/test-binder-sage",
+        },
+        stripPrompts: {
+          inPrompt: 'sage: ',
+          continuationPrompt: '....: ',
+          selector: 'pre:contains("sage: ")',
+        },
+        kernelOptions: {
+          name: "sagemath",
+        },
+      }
+    </script>
+    <script src="https://unpkg.com/thebelab@^0.1.0" type="text/javascript"></script>
+    <script>    <!-- Setup the activate button !-->
+      $(function() {
+          var cellSelector = "pre:contains('sage: ')";
+          if ($(cellSelector).length > 0) {
+              $('<button id="thebe-activate">Activate</button>')
+                  .css({position: 'absolute', right: 0})
+                  .click(function() {
+                      thebelab.bootstrap();
+                      $(this).attr('disabled', 'disabled');
+                  })
+                  .prependTo('div.body');
+          }
+      });
+    </script>
 {% endblock %}
 
 {%- block footer %}

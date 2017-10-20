@@ -11,6 +11,7 @@ Utilities for authoring SageMath packages
 
    sage_package/setuptools
    sage_package/sphinx
+   sage_package/sphinx-demo
 
 Indices and tables
 ==================
