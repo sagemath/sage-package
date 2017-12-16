@@ -59,6 +59,11 @@ documentation style:
 
         Fix the failing cross-references above!
 
+- Mathematics:
+
+    - `\frac{\pi}(1+10^4)`
+    - Usual Sage macros `\NN`, `\ZZ`, `\QQ`, `\ZZ`
+
 - Miscellaneous roles:
 
     - :wikipedia:`SageMath`
