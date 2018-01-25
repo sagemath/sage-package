@@ -19,8 +19,8 @@
 
 {% block extrahead %}
     <link rel="icon" href="{{ pathto('_static/sageicon.png', 1) }}" type="image/x-icon" />
-    <!-- Thebe configuration for live code cells (https://github.com/minrk/thebelab)
 
+    <!-- Thebe configuration for live code cells (https://github.com/minrk/thebelab)
       This sets up a dedicated button in the top right corner. When
       clicked, each code block containing a sage: prompt is appended a
       "Run" button to execute the code on a Sage Jupyter kernel
@@ -39,20 +39,23 @@
         kernelOptions: {
           name: "sagemath",
         },
+        requestKernel: true
       }
     </script>
-    <script src="https://unpkg.com/thebelab@^0.1.0" type="text/javascript"></script>
-    <script>    <!-- Setup the activate button !-->
+
+    <!-- Load the Thebe activation and status field library  !-->
+    <script src="{{ pathto('_static/thebe_status_field.js', 1) }}" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="{{ pathto('_static/thebe_status_field.css', 1) }}"/>
+
+    <!-- Test whether some code cell contains Sage code
+         If yes, setup the ThebeLab activation and status field !-->
+    <script>
       $(function() {
           var cellSelector = "pre:contains('sage: ')";
           if ($(cellSelector).length > 0) {
-              $('<button id="thebe-activate">Activate</button>')
-                  .css({position: 'absolute', right: 0})
-                  .click(function() {
-                      thebelab.bootstrap();
-                      $(this).attr('disabled', 'disabled');
-                  })
-                  .prependTo('div.body');
+             $('<span class="thebe_status_field" style="position: fixed; right:0;"></span>')
+                .prependTo('div.body');
+             thebelab_place_activate_button();
           }
       });
     </script>
