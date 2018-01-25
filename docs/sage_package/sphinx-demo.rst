@@ -43,7 +43,7 @@ documentation style:
         sage: x,y = SR.var('x,y')
         sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2))
 
-    LaTeX output (non functional yet)::
+    LaTeX output::
 
         sage: %display latex
         sage: factor(x^100 - 1)
