@@ -34,6 +34,12 @@ documentation style:
         sage: y + z
         3
 
+    LaTeX output::
+
+        sage: %display latex
+        sage: factor(x^100 - 1)
+        (x - 1)*(x + 1)*(x^2 + 1)*(x^4 - x^3 + x^2 - x + 1)*(x^4 + x^3 + x^2 + x + 1)*(x^8 - x^6 + x^4 - x^2 + 1)*(x^20 - x^15 + x^10 - x^5 + 1)*(x^20 + x^15 + x^10 + x^5 + 1)*(x^40 - x^30 + x^20 - x^10 + 1)
+
     Plots::
 
         sage: plot(sin(x))
@@ -43,11 +49,11 @@ documentation style:
         sage: x,y = SR.var('x,y')
         sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2))
 
-    LaTeX output::
+    Interacts (non functional yet)::
 
-        sage: %display latex
-        sage: factor(x^100 - 1)
-        (x - 1)*(x + 1)*(x^2 + 1)*(x^4 - x^3 + x^2 - x + 1)*(x^4 + x^3 + x^2 + x + 1)*(x^8 - x^6 + x^4 - x^2 + 1)*(x^20 - x^15 + x^10 - x^5 + 1)*(x^20 + x^15 + x^10 + x^5 + 1)*(x^40 - x^30 + x^20 - x^10 + 1)
+        sage: @interact
+        ....: def f(n=31):
+        ....:     return factor(n)
 
     Plain code blocks (i.e. not containing a sage prompt) are not affected::
 
