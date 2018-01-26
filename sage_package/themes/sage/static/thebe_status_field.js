@@ -10,14 +10,14 @@ function thebe_place_activate_button(){
 }
 
 function thebe_remove_activate_button(){
-  $('.activate_button_field').empty();
+  $('.thebe_status_field').empty();
 }
 
 function thebe_place_status_field(){
   $('.thebe_status_field')
-    .html('<div class="thebe-status-field"\
+    .html('<span class="thebe-status-field"\
                 title="ThebeLab status.\nClick `Run` to execute code cells.\nComputations courtesy of mybinder.org.">\
-          </div>');
+          </span>');
 }
 
 function thebe_activate_cells(){
