@@ -61,7 +61,7 @@ documentation style:
 
 - Mathematics:
 
-    - `\frac{\pi}(1+10^4)`
+    - `\frac{\pi}{1+10^4}`
     - Usual Sage macros `\NN`, `\ZZ`, `\QQ`, `\ZZ`
 
 - Miscellaneous roles:
