@@ -15,9 +15,9 @@ function thebe_remove_activate_button(){
 
 function thebe_place_status_field(){
   $('.thebe_status_field')
-    .html('<span class="thebe-status-field"\
+    .html('<div class="thebe-status-field"\
                 title="ThebeLab status.\nClick `Run` to execute code cells.\nComputations courtesy of mybinder.org.">\
-          </span>');
+          </div>');
 }
 
 function thebe_activate_cells(){
