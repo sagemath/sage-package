@@ -44,9 +44,13 @@ documentation style:
 
         sage: plot(sin(x))
 
-    3D plots (non functional yet)::
+    3D plots are functional with the ``threejs`` backend::
 
         sage: x,y = SR.var('x,y')
+        sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2), viewer='threejs', online=True)
+
+    but not yet with the default `jmol` backend::
+
         sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2))
 
     Interacts (non functional yet)::
