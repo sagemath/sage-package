@@ -49,7 +49,7 @@ documentation style:
         sage: x,y = SR.var('x,y')
         sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2), viewer='threejs', online=True)
 
-    but not yet with the default `jmol` backend::
+    but not yet with the default ``jmol`` backend::
 
         sage: plot3d(x^2 + y^2, (x,-2,2), (y,-2,2))
 
