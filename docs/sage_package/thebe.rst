@@ -8,7 +8,7 @@ may have followed the ``About`` link of some of them:
 - The documentation of some SageMath package, typically using the
   `sage-package <http://sage-package.readthedocs.io/en/latest/>`_ tools.
   See e.g. this `demo page <http://sage-package.readthedocs.io/en/latest/sage_package/sphinx-demo.html>`_,
-and click ``Activate``.
+  and click ``Activate``.
 
 - `More SageMath tutorials <https://more-sagemath-tutorials.readthedocs.io/>`_
 
