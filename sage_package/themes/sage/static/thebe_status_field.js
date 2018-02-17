@@ -19,6 +19,17 @@ function thebe_place_status_field(){
                 title="ThebeLab status.\nClick `run` to execute code cells.\nComputations courtesy of mybinder.org.">\
           </div>');
 }
+sagemath='<a href="http://sagemath.org">SageMath</a>'
+mybinder='<a href="http://mybinder.org">mybinder.org</a>'
+about=' (<a href="http://sage-package.readthedocs.io/en/latest/sage_package/thebe.html">About</a>)'
+
+messages = { 'building': 'Building '+sagemath+' on '+mybinder,
+             'built': 'Built '+sagemath+' on '+mybinder,
+             'launching': 'Launching  server on '+mybinder,
+             'server-ready': 'Launched server on '+mybinder,
+             'starting': 'Launching '+sagemath+' on '+mybinder,
+             'ready': 'Running  '+sagemath+' on '+mybinder,
+           }
 
 function thebe_activate_cells(){
   // Download thebe
@@ -26,7 +37,7 @@ function thebe_activate_cells(){
     console.log("Status changed:", data.status, data.message);
     $(".thebe-status-field")
       .attr("class", "thebe-status-field thebe-status-" + data.status)
-      .text(data.status);
+      .html(messages[data.status]+about);
   });
   thebelab.bootstrap();
 }
