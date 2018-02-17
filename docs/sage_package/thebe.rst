@@ -2,13 +2,13 @@ Live SageMath examples in static HTML pages with Thebe and binder
 =================================================================
 
 Web pages may include live SageMath examples that can be edited and
-executed online after clicking `Activate`. If you read this page, you
-may have followed the `About` link of some of them:
+executed online after clicking ``Activate``. If you read this page, you
+may have followed the ``About`` link of some of them:
 
 - The documentation of some SageMath package, typically using the
   `sage-package <http://sage-package.readthedocs.io/en/latest/>`_ tools.
   See e.g. this `demo page <http://sage-package.readthedocs.io/en/latest/sage_package/sphinx-demo.html>`_,
-and click `Activate`.
+and click ``Activate``.
 
 - `More SageMath tutorials <https://more-sagemath-tutorials.readthedocs.io/>`_
 
@@ -17,7 +17,7 @@ and click `Activate`.
 
 We provide here some background about the Jupyter-based service behind
 the scene, for readers and authors. A similar service is provided by
-`SageMathCell <http://sagecell.sagemath.org/help.html>`, which see for
+`SageMathCell <http://sagecell.sagemath.org/help.html>`_, which see for
 background. A brief comparison is provided below.
 
 In a nutshell
@@ -92,7 +92,7 @@ adding the following header to each page::
     <!-- Activate Thebe directly upon loading the page !-->
     <script>window.onload = function() { thebelab.bootstrap(); };</script>
 
-and writing the examples as:
+and writing the examples as::
 
     <pre>
         sage: 1+1
@@ -116,7 +116,7 @@ based on the above, and hosted in some github repository. See this
 Thebe versus SageMath Cell
 --------------------------
 
-`Thebe` is similar in principle to `SageMath Cell <http://sagecell.sagemath.org/>`_.
+``Thebe`` is similar in principle to `SageMath Cell <http://sagecell.sagemath.org/>`_.
 It introduces additional flexibility by enabling the customization of
 the programming language (kernel), computing backend (e.g. a local
 Jupyter server, ...) and executable environment (e.g. via binder).
