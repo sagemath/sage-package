@@ -19,7 +19,7 @@ function thebe_place_status_field(){
                 title="ThebeLab status.\nClick `run` to execute code cells.\nComputations courtesy of mybinder.org.">\
           </div>');
 }
-sagemath='<a href="http://sagemath.org">SageMath</a>'
+sagemath='<a href="http://sagemath.org">Sage</a>'
 mybinder='<a href="http://mybinder.org">mybinder.org</a>'
 about=' (<a href="http://sage-package.readthedocs.io/en/latest/sage_package/thebe.html">About</a>)'
 
