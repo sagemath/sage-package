@@ -19,4 +19,4 @@ For an example of use, see http://github.com/sagemath/sage_sample .
 Recent features
 ---------------
 
-0.0.6: Live documentation with `Thebe <https://sage-package.readthedocs.io/en/latest/sage_package/thebe.html>`_
+0.0.7: Live documentation with `Thebe <https://sage-package.readthedocs.io/en/latest/sage_package/thebe.html>`_
