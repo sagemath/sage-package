@@ -1,7 +1,7 @@
 Live SageMath examples in static HTML pages with Thebe and binder
 =================================================================
 
-Web pages may include live SageMath examples that can be edited and
+Web pages may include live ``SageMath`` examples that can be edited and
 executed online after clicking ``Activate``. If you read this page, you
 may have followed the ``About`` link of some of them:
 
@@ -25,14 +25,19 @@ In a nutshell
 
 Live code examples are handled by the `Thebe
 <https://github.com/minrk/thebelab>`_ javascript library, configured
-to run the computations on `mybinder.org <http://mybinder.org>`_,
+to run on `mybinder.org <http://mybinder.org>`_,
 using the latest version of `SageMath <http://sagemath.org>`_. See
 below for details on those free and open source components.
 
-This service is meant for casual use. As for any cloud-based service,
+The ``binder`` service is meant for casual use. As for any cloud-based service,
 don't run calculations that could leak private information. See the
 `binder faq <https://mybinder.readthedocs.io/en/latest/faq.html>`_ for
 details.
+
+Documentation pages produced with ``sage-package`` take further steps
+to reduce the dependence on network and cloud services. If the page is
+served by a Jupyter server, it will attempt to use it to fetch the
+Thebe javascript and run the computations.
 
 Components
 ----------
