@@ -111,7 +111,7 @@ For the Sphinx-generated documentation of a Sage based project,
 you can use the Sphinx extension provided by the
 `Sage package authoring utilities <https://github.com/sagemath/sage-package>`_.
 It includes some additional styling and goodies, including the
-activate button.
+activate button and running computations locally when possible.
 
 If you need to customize the computation environment, for example by
 installing additional packages, you can create your own Dockerfile,
