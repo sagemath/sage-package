@@ -4,6 +4,11 @@
   padding: 8px;
 }
 
+.thebe-status-field.thebe-status-downloading {
+  /* Binder is building the image */
+  background-color: yellow;
+}
+
 .thebe-status-field.thebe-status-building {
   /* Binder is building the image */
   background-color: yellow;

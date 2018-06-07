@@ -24,18 +24,20 @@ function thebe_place_status_field(){
 sagemath='<a href="http://sagemath.org">Sage</a>'
 mybinder='<a href="http://mybinder.org">mybinder.org</a>'
 about=' (<a href="http://sage-package.readthedocs.io/en/latest/sage_package/thebe.html">About</a>)'
+server=''
 
 messages = {
+  'downloading': 'Downloading Thebe',
   'building': 'Building '+sagemath,
   'built': 'Built '+sagemath,
-  'launching': 'Launching server on '+mybinder,
+  'launching': 'Launching server',
   'server-ready': 'Launched server',
   'starting': 'Launching '+sagemath,
   'ready': 'Running  '+sagemath,
 }
 
 function thebe_update_status_field(evt, data) {
-  console.log("Status changed:", data.status, data.message);
+  console.log("Thebe: status changed (" + data.status + "): " + data.message);
   $(".thebe-status-field")
     .attr("class", "thebe-status-field thebe-status-" + data.status)
     .html(messages[data.status]+server+about);
@@ -43,7 +45,7 @@ function thebe_update_status_field(evt, data) {
 
 function thebe_bootstrap_local () {
   console.log("Thebe: using local server");
-  server=""
+  thebelab.on("status", thebe_update_status_field);
   thebelab.bootstrap({
     binderOptions: {repo: null},
     kernelOptions: {
@@ -57,42 +59,59 @@ function thebe_bootstrap_local () {
 
 function thebe_bootstrap_binder () {
   console.log("Thebe: using remote server on binder");
-  server = " on "+mybinder
-  thebelab.bootstrap({});
+  thebelab.on("status", thebe_update_status_field); // Duplicated with above; would be nicer as thebe option
+  server = " on "+mybinder;
+  thebelab.bootstrap();
 }
 
-function thebe_activate_cells(){
-  thebelab.on("status", thebe_update_status_field);
+// Try downloading thebe remotely; if successfull call next_operation
+function thebe_download_remote(next_operation) {
+  thebe_update_status_field({}, {status: 'downloading', message: ''})
+  // Load the Thebe library
+  $.getScript("https://unpkg.com/thebelab@^0.1.0")
+    .done(function(script, textStatus) {
+      next_operation()
+    })
+    .fail(function(jqxhr, settings, exception ) {
+      $( "div.log" ).text( "Could not fetch ThebeLab library." );
+      // TODO: report on status field
+    });
+}
+
+// Try downloading thebe locally, or remotely if unavailable; if successfull call next_operation
+function thebe_download_local(next_operation) {
+  console.log("Thebe: trying to get thebe from the nbextensions");
+  $.getScript("/nbextensions/thebelab.js")
+    .done(function(script, textStatus) {
+      next_operation()
+    })
+    .fail(function(jqxhr, settings, exception ) {
+      thebe_download_remote(next_operation);
+    });
+}
+
+// Activate button function hook
+function thebe_activate_button_function(){
+  thebe_remove_activate_button();
+  thebe_place_status_field();
+  // Checks whether served by a Jupyter server, and whether a sagemath kernel is available
+  // Proceed accordingly by downloading thebe locally or remotely
+  // and running a kernel locally or remotely
   if (window.location.protocol.startsWith('http')) {
     ajax(window.location.origin+'/api/kernelspecs', {
       dataType: 'json',
       success: function(json) {
         if (json['kernelspecs']['sagemath'])
-        thebe_bootstrap_local();
+          thebe_download_local(thebe_bootstrap_local)
       },
       error:    function() {
-        thebe_bootstrap_binder();
+        thebe_download_local(thebe_bootstrap_binder);
       }
     });
   } else {
-    thebe_bootstrap_binder();
+    thebe_download_remote(thebe_bootstrap_binder);
   }
 }
-
-// Activate button function hook
-function thebe_activate_button_function(){
-  // Load the Thebe library
-  $.getScript("https://unpkg.com/thebelab@^0.1.0")
-    .done(function(script, textStatus) {
-      thebe_remove_activate_button();
-      thebe_place_status_field();
-      thebe_activate_cells();
-    })
-    .fail(function(jqxhr, settings, exception ) {
-      $( "div.log" ).text( "Could not fetch ThebeLab library." );
-    });
-}
-
 
 /*****************************************************************************
   Jupyterlab utilities, taken from:
