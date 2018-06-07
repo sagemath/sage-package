@@ -34,6 +34,7 @@ messages = {
   'server-ready': 'Launched server',
   'starting': 'Launching '+sagemath,
   'ready': 'Running  '+sagemath,
+  'failed': 'Failed (network error?)'
 }
 
 function thebe_update_status_field(evt, data) {
@@ -74,7 +75,7 @@ function thebe_download_remote(next_operation) {
     })
     .fail(function(jqxhr, settings, exception ) {
       $( "div.log" ).text( "Could not fetch ThebeLab library." );
-      // TODO: report on status field
+      thebe_update_status_field({}, {status: 'failed', message: ''})
     });
 }
 
